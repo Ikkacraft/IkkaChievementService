@@ -1,0 +1,15 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET           /                                      @controllers.Application.index
+
+# Badges
+GET           /badges                                @controllers.Badges.getBadges()
+GET           /badges/categories/:category_id        @controllers.Badges.getBadgesByCategory(category_id: Long)
+GET           /badges/user/:user_id                  @controllers.Badges.getBadgesByuser(user_id: String)
+POST          /badges                                @controllers.Badges.createBadge()
+POST          /badges/unlock/                        @controllers.Badges.unlockBadge()
+PUT           /badges/:badge_id                      @controllers.Badges.updateBadge(badge_id: Long)
+DELETE        /badges/:badge_id                      @controllers.Badges.deleteBadge(badge_id: Long)

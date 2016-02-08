@@ -1,5 +1,3 @@
-import com.github.play2war.plugin.Play2WarKeys
-import com.github.play2war.plugin.Play2WarPlugin
 import com.github.play2war.plugin.{Play2WarKeys, Play2WarPlugin}
 import play.sbt.PlayImport._
 import play.sbt.PlayScala
@@ -22,7 +20,7 @@ Play2WarPlugin.play2WarSettings
 
 Play2WarKeys.servletVersion := "3.1"
 
-Play2WarKeys.targetName := Some("IkkaUser")
+Play2WarKeys.targetName := Some("ikkachievement")
 
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )
 

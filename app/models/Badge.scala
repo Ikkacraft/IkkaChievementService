@@ -1,14 +1,12 @@
 package models
 
-import anorm.RowParser
 import anorm.SqlParser._
-import anorm.~
-import play.api.libs.json.Json
-import play.api.libs.json.Writes
+import anorm.{RowParser, ~}
+import play.api.libs.json.{Json, Writes}
 
-case class Badge(badge_id: Long, var title: String, var description: Option[String], var urlImage: Option[String], categorie_id: Option[Long]) {
+case class Badge(badge_id: Long, var title: String, category_id: Long, var description: Option[String], var parameters:Option[String],var urlImage: Option[String]) {
 
-  def this(title: String, description: Option[String]) = this(0, title, description)
+  def this(title: String, category_id: Long, description: Option[String], parameters: Option[String], urlImage: Option[String]) = this(0, title, category_id, description, parameters, urlImage)
 
   def setTitle(t: String) {
     title = t
@@ -18,8 +16,12 @@ case class Badge(badge_id: Long, var title: String, var description: Option[Stri
     description = Option(d)
   }
 
-  def setUrlPic(u: String) {
+  def setUrlImage(u: String) {
     urlImage = Option(u)
+  }
+
+  def setParameters(p: String) {
+    parameters = Option(p)
   }
 }
 
@@ -28,11 +30,12 @@ object Badge {
 
   val parser: RowParser[Badge] = {
     get[Long]("ID") ~
-      get[String]("TITRE") ~
+      get[String]("TITLE") ~
+      get[Long]("ID_CATEGORIE") ~
       get[Option[String]]("DESCRIPTION") ~
-      get[Option[String]]("URLPIC") ~
-      get[Option[Long]]("ID_CATEGORIE") map { case badge_id ~ title ~ description ~ urlImage ~ categorie_id =>
-      Badge(badge_id, title, description, urlImage, categorie_id)
+      get[Option[String]]("IMAGE_URL") ~
+      get[Option[String]]("PARAMETERS") map { case badge_id ~ title ~ category_id ~ description ~ urlImage ~ parameters =>
+      Badge(badge_id, title, category_id,description, urlImage, parameters)
     }
   }
 }

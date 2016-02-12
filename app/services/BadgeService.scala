@@ -7,9 +7,7 @@ import com.google.inject.Inject
 import models.Badge
 import play.api.Play.current
 import play.api.db._
-import play.api.libs.ws.{WSResponse, WSClient}
-
-import scala.concurrent.Future
+import play.api.libs.ws._
 
 
 class BadgeService @Inject()(ws: WSClient) {
@@ -34,7 +32,7 @@ class BadgeService @Inject()(ws: WSClient) {
     results
   }
 
-  def create(badge: Badge):Long = {
+  def create(badge: Badge): Long =  {
     val id: Option[Long] = DB.withConnection { implicit c =>
       SQL("INSERT INTO BADGE(ID_CATEGORY, TITLE, DESCRIPTION, IMAGE_URL, PARAMETERS) VALUES({id_category}, {title}, {description}, {image_url}, {parameters})")
         .on('id_category -> badge.category_id, 'title -> badge.title, 'description -> badge.description, 'image_url -> badge.urlImage, 'parameters -> badge.parameters).executeInsert()
@@ -42,18 +40,10 @@ class BadgeService @Inject()(ws: WSClient) {
     id.getOrElse(-1)
   }
 
-  def unlock(user_id: Long, badge_id: Long, status:String):Long = {
+  def unlock(user_id: Long, badge_id: Long, status: String, remaining: Long): Long = {
     val id: Option[Long] = DB.withConnection { implicit c =>
-      SQL("UPDATE BADGES SET STATUS = {status} WHERE UUID = {user_id} AND ID = {badge_id}")
-        .on('user_id -> user_id, 'badge_id -> badge_id, 'status -> status).executeInsert()
-    }
-    id.getOrElse(-1)
-  }
-
-  def link(user_id: Long, badge_id: Long):Long = {
-    val id: Option[Long] = DB.withConnection { implicit c =>
-      SQL("INSERT INTO UNLOCK(UUID, ID) VALUES({user_id}, {badge_id})")
-        .on('user_id -> user_id, 'badge_id -> badge_id).executeInsert()
+      SQL("REPLACE INTO UNBLOCK VALUES({badge_id}, {user_id}, {status}, {remaining})")
+        .on('user_id -> user_id, 'badge_id -> badge_id, 'status -> status, 'remaining -> remaining).executeInsert()
     }
     id.getOrElse(-1)
   }
@@ -79,17 +69,5 @@ class BadgeService @Inject()(ws: WSClient) {
     DB.withConnection { implicit c =>
       SQL("DELETE FROM UNBLOCK WHERE ID = {badge_id}").on('badge_id -> badge_id).executeUpdate()
     }
-  }
-
-  def linkBadgeToUsers(badge_id:Long): Int = {
-    val url = "http://localhost:9001/users"
-    val futureResponse: Future[WSResponse] = ws.url(url).get()
-
-    val result: Future[Int] = futureResponse map { response: WSResponse =>
-      response.body.toList.foreach{ user =>
-        link(badge_id, user["UUID"])
-      }
-    }
-    result
   }
 }

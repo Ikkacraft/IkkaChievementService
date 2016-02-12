@@ -8,8 +8,6 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import services.BadgeService
 
-import scala.concurrent.Future
-
 class Badges @Inject()(badgeService: BadgeService) extends Controller {
   def getBadges() = Action {
     Ok(Json.toJson(badgeService.getAll()))
@@ -31,10 +29,9 @@ class Badges @Inject()(badgeService: BadgeService) extends Controller {
     val parameters: Option[String] = (request.body \ "parameters").asOpt[String]
 
     val badge = new Badge(title, category, description, parameters, image_url)
-    val id = badgeService.create(badge)
-    id match {
+    badgeService.create(badge) match {
       case -1 => BadRequest("The badge could not be created")
-      case _  => Created(Json.toJson(id))
+      case _  => Created("The badge has been successfully created")
     }
   }
 
@@ -42,8 +39,9 @@ class Badges @Inject()(badgeService: BadgeService) extends Controller {
     val user_id:Long = (request.body \ "user_id").as[Long]
     val badge_id:Long = (request.body \ "badge_id").as[Long]
     val status:String = (request.body \ "status").as[String]
+    val remaining:Long = (request.body \ "status").asOpt[Long].getOrElse(-1)
 
-    val id:Future[Int] = badgeService.unlock(user_id, badge_id, status)
+    val id = badgeService.unlock(user_id, badge_id, status, remaining)
     id match {
       case -1 => BadRequest("The badge could not be unlock")
       case _  => Ok(Json.toJson(id))

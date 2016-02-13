@@ -7,6 +7,8 @@ GET           /                                      @controllers.Application.in
 
 # Badges
 GET           /badges                                @controllers.Badges.getBadges()
+GET           /categories                            @controllers.Badges.getCategories()
+GET           /categories/:category_id               @controllers.Badges.getCategory(category_id: Long)
 GET           /badges/categories/:category_id        @controllers.Badges.getBadgesByCategory(category_id: Long)
 GET           /badges/user/:user_id                  @controllers.Badges.getBadgesByuser(user_id: String)
 POST          /badges                                @controllers.Badges.createBadge()

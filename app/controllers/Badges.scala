@@ -68,4 +68,12 @@ class Badges @Inject()(badgeService: BadgeService) extends Controller {
   def deleteBadge(badge_id: Long) = Action {
     Ok(Json.toJson(badgeService.delete(badge_id)))
   }
+
+  def getCategories() = Action {
+    Ok(Json.toJson(badgeService.getAllCategory()))
+  }
+
+  def getCategory(category_id : Long) = Action {
+    Ok(Json.toJson(badgeService.getCategory(category_id)))
+  }
 }

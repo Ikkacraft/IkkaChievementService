@@ -31,7 +31,7 @@ object Badge {
   val parser: RowParser[Badge] = {
     get[Long]("ID") ~
       get[String]("TITLE") ~
-      get[Long]("ID_CATEGORIE") ~
+      get[Long]("ID_CATEGORY") ~
       get[Option[String]]("DESCRIPTION") ~
       get[Option[String]]("IMAGE_URL") ~
       get[Option[String]]("PARAMETERS") map { case badge_id ~ title ~ category_id ~ description ~ urlImage ~ parameters =>

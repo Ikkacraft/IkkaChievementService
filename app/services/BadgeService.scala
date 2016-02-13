@@ -4,16 +4,30 @@ import java.util.UUID
 
 import anorm._
 import com.google.inject.Inject
-import models.Badge
+import models.{Category, Badge}
 import play.api.Play.current
 import play.api.db._
 import play.api.libs.ws._
 
 
 class BadgeService @Inject()(ws: WSClient) {
+  def getAllCategory(): List[Category] = {
+    val results: List[Category] = DB.withConnection { implicit c =>
+      SQL("""SELECT * FROM CATEGORY""").as(Category.parser.*)
+    }
+    results
+  }
+
+  def getCategory(category_id: Long): Category= {
+    val results: Category = DB.withConnection { implicit c =>
+      SQL("""SELECT * FROM CATEGORY WHERE ID = {category_id}""").on('category_id -> category_id).as(Category.parser.single)
+    }
+    results
+  }
+
   def getAll(): List[Badge] = {
     val results: List[Badge] = DB.withConnection { implicit c =>
-      SQL( """SELECT * FROM BADGE""").as(Badge.parser.*)
+      SQL("""SELECT * FROM BADGE""").as(Badge.parser.*)
     }
     results
   }

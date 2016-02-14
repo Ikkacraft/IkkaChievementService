@@ -41,7 +41,7 @@ class BadgeService @Inject()(ws: WSClient) {
 
   def getBadgesByUser(user_id: UUID) = {
     val results: List[Badge] = DB.withConnection { implicit c =>
-      SQL( """SELECT * FROM BADGE JOIN UNLOCK ON UNLOCK.ID = BADGE.ID WHERE UNLOCK.UUID = {user_id} """).on('user_id -> user_id).as(Badge.parser.*)
+      SQL( """SELECT * FROM BADGE JOIN UNBLOCK ON UNBLOCK.ID = BADGE.ID WHERE UNBLOCK.UUID = {user_id} """).on('user_id -> user_id).as(Badge.parser.*)
     }
     results
   }

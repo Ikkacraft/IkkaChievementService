@@ -23,9 +23,9 @@ class Badges @Inject()(badgeService: BadgeService) extends Controller {
 
   def createBadge() = Action(parse.json) { implicit request =>
     val title: String = (request.body \ "title").as[String]
-    val category: Long = (request.body \ "category").as[Long]
+    val category: Long = (request.body \ "category_id").as[Long]
     val description: Option[String] = (request.body \ "description").asOpt[String]
-    val image_url: Option[String] = (request.body \ "image_url").asOpt[String]
+    val image_url: Option[String] = (request.body \ "urlImage").asOpt[String]
     val parameters: Option[String] = (request.body \ "parameters").asOpt[String]
 
     val badge = new Badge(title, category, description, parameters, image_url)
@@ -51,10 +51,10 @@ class Badges @Inject()(badgeService: BadgeService) extends Controller {
 
   def updateBadge(badge_id: Long) = Action(parse.json) { implicit request =>
     val title: String = (request.body \ "title").as[String]
-    val category: Long = (request.body \ "category").as[Long]
+    val category: Long = (request.body \ "category_id").as[Long]
     val description: Option[String] = (request.body \ "description").asOpt[String]
     val parameters: Option[String] = (request.body \ "parameters").asOpt[String]
-    val image_url: Option[String] = (request.body \ "image_url").asOpt[String]
+    val image_url: Option[String] = (request.body \ "urlImage").asOpt[String]
 
 
     val badge = new Badge(badge_id, title, category, description, parameters, image_url)

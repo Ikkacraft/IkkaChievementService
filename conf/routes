@@ -9,8 +9,9 @@ GET           /                                      @controllers.Application.in
 GET           /badges                                @controllers.Badges.getBadges()
 GET           /badges/categories/:category_id        @controllers.Badges.getBadgesByCategory(category_id: Long)
 GET           /badges/user/:user_id                  @controllers.Badges.getBadgesByuser(user_id: String)
+GET           /badges/user/:user_id/:status          @controllers.Badges.getBadgesFilteredByUser(user_id: String, status:String)
 POST          /badges                                @controllers.Badges.createBadge()
-PUT           /badges/unlock/                        @controllers.Badges.unlockBadge()
+PUT           /badges/unlock                         @controllers.Badges.unlockBadge()
 PUT           /badges/:badge_id                      @controllers.Badges.updateBadge(badge_id: Long)
 DELETE        /badges/:badge_id                      @controllers.Badges.deleteBadge(badge_id: Long)
 

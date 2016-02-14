@@ -36,14 +36,14 @@ class Badges @Inject()(badgeService: BadgeService) extends Controller {
   }
 
   def unlockBadge() = Action(parse.json) { implicit request =>
-    val user_id:Long = (request.body \ "user_id").as[Long]
+    val user_id:String = (request.body \ "user_id").as[String]
     val badge_id:Long = (request.body \ "badge_id").as[Long]
     val status:String = (request.body \ "status").as[String]
-    val remaining:Long = (request.body \ "status").asOpt[Long].getOrElse(-1)
+    val remaining:Long = (request.body \ "remaining").asOpt[Long].getOrElse(-1)
 
-    val id = badgeService.unlock(user_id, badge_id, status, remaining)
+    val id = badgeService.unlock(UUID.fromString(user_id), badge_id, status, remaining)
     id match {
-      case -1 => BadRequest("The badge could not be unlock")
+      case 0 => BadRequest("The badge could not be unlock")
       case _  => Ok(Json.toJson(id))
     }
 
@@ -75,5 +75,9 @@ class Badges @Inject()(badgeService: BadgeService) extends Controller {
 
   def getCategory(category_id : Long) = Action {
     Ok(Json.toJson(badgeService.getCategory(category_id)))
+  }
+
+  def getBadgesFilteredByUser(user_id: String, status: String) = Action {
+    Ok(Json.toJson(badgeService.getBadgesFilteredByUser(UUID.fromString(user_id), status)))
   }
 }

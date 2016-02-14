@@ -34,8 +34,8 @@ object Badge {
       get[Long]("ID_CATEGORY") ~
       get[Option[String]]("DESCRIPTION") ~
       get[Option[String]]("PARAMETERS") ~
-      get[Option[String]]("IMAGE_URL") map { case badge_id ~ title ~ category_id ~ description  ~ parameters ~ urlImage =>
-      Badge(badge_id, title, category_id,description, parameters, urlImage)
+      get[Option[String]]("IMAGE_URL") map { case badge_id ~ title ~ category_id ~ description ~ parameters ~ urlImage=>
+      Badge(badge_id, title, category_id, description, parameters, urlImage)
     }
   }
 }

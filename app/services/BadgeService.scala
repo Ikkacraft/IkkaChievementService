@@ -3,14 +3,11 @@ package services
 import java.util.UUID
 
 import anorm._
-import com.google.inject.Inject
-import models.{EnhancedBadge, Category, Badge}
+import models.{Badge, Category, EnhancedBadge}
 import play.api.Play.current
 import play.api.db._
-import play.api.libs.ws._
 
-
-class BadgeService @Inject()(ws: WSClient) {
+class BadgeService {
   def getBadgesFilteredByUser(user_id: UUID, status: String): List[Badge] = {
     val results: List[Badge] = DB.withConnection { implicit c =>
       SQL( """SELECT BADGE.ID, ID_CATEGORY, TITLE, DESCRIPTION, IMAGE_URL, PARAMETERS, UNBLOCK.STATUS, UNBLOCK.REMAINING FROM BADGE JOIN UNBLOCK ON UNBLOCK.ID = BADGE.ID WHERE UNBLOCK.UUID = {user_id} AND UNBLOCK.STATUS= {status} """)
@@ -49,7 +46,7 @@ class BadgeService @Inject()(ws: WSClient) {
 
   def getBadgesByUser(user_id: UUID) = {
     val results: List[EnhancedBadge] = DB.withConnection { implicit c =>
-      SQL( """SELECT BADGE.ID, ID_CATEGORY, TITLE, DESCRIPTION, IMAGE_URL, PARAMETERS, UNBLOCK.STATUS, UNBLOCK.REMAINING FROM BADGE JOIN UNBLOCK ON UNBLOCK.ID = BADGE.ID WHERE UNBLOCK.UUID = {user_id} """)
+      SQL( """SELECT BADGE.ID, ID_CATEGORY, TITLE, DESCRIPTION, IMAGE_URL, PARAMETERS, UNBLOCK.STATUS, UNBLOCK.REMAINING FROM BADGE JOIN UNBLOCK ON UNBLOCK.ID = BADGE.ID WHERE UNBLOCK.UUID = {user_id}  ORDER BY STATUS DESC""")
         .on('user_id -> user_id).as(EnhancedBadge.parser.* )
     }
     results

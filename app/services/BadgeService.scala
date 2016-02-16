@@ -23,9 +23,9 @@ class BadgeService {
     results
   }
 
-  def getCategory(category_id: Long): Category = {
-    val results: Category = DB.withConnection { implicit c =>
-      SQL( """SELECT * FROM CATEGORY WHERE ID = {category_id}""").on('category_id -> category_id).as(Category.parser.single)
+  def getCategory(category_id: Long): Option[Category] = {
+    val results: Option[Category] = DB.withConnection { implicit c =>
+      SQL( """SELECT * FROM CATEGORY WHERE ID = {category_id}""").on('category_id -> category_id).as(Category.parser.singleOpt)
     }
     results
   }
@@ -44,7 +44,7 @@ class BadgeService {
     results
   }
 
-  def getBadgesByUser(user_id: UUID) = {
+  def getBadgesByUser(user_id: UUID) : List[EnhancedBadge] = {
     val results: List[EnhancedBadge] = DB.withConnection { implicit c =>
       SQL( """SELECT BADGE.ID, ID_CATEGORY, TITLE, DESCRIPTION, IMAGE_URL, PARAMETERS, UNBLOCK.STATUS, UNBLOCK.REMAINING FROM BADGE JOIN UNBLOCK ON UNBLOCK.ID = BADGE.ID WHERE UNBLOCK.UUID = {user_id}  ORDER BY STATUS DESC""")
         .on('user_id -> user_id).as(EnhancedBadge.parser.* )

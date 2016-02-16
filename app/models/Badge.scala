@@ -23,6 +23,17 @@ case class Badge(badge_id: Long, var title: String, category_id: Long, var descr
   def setParameters(p: String) {
     parameters = Option(p)
   }
+
+  def toXml = {
+    <badge>
+      <badge_id>{badge_id}</badge_id>
+      <title>{title}</title>
+      <category_id>{category_id}</category_id>
+      {if (description.isDefined) <description>{description.get}</description> else <description />}
+      {if (parameters.isDefined) <parameters>{parameters.get}</parameters> else <parameters />}
+      {if (urlImage.isDefined) <url_image>{urlImage.get}</url_image> else <url_image />}
+    </badge>
+  }
 }
 
 object Badge {

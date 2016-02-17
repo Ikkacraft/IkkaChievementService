@@ -3,22 +3,31 @@ package controllers
 import java.util.UUID
 import javax.inject.Inject
 
+import io.swagger.annotations.{ApiResponse, ApiResponses, ApiOperation, Api}
 import models.{EnhancedBadge, Badge}
 import play.api.libs.json.Json
 import play.api.mvc._
 import services.BadgeService
 
+@Api(value = "/badges", description = "Operations about user achievements (badges)")
 class Badges @Inject()(badgeService: BadgeService) extends Controller {
+
+  @ApiOperation(
+    nickname = "getBadges",
+    value = "Get all badges",
+    notes = "Return a list of badges",
+    response = classOf[models.Badge], httpMethod = "GET")
+  @ApiResponses(Array(new ApiResponse(code = 404, message = "Badges not found"), new ApiResponse(code = 200, message = "Badges found")))
   def getBadges() = Action { request =>
     request.accepts("application/json") || request.accepts("text/json") match {
       case true => {
         val badges: List[Badge] = badgeService.getAll()
-        if (badges.isEmpty) NoContent
+        if (badges.isEmpty) NotFound("Badges not found")
         else Ok(Json.toJson(badges))
       }
       case false => {
         val badges: List[Badge] = badgeService.getAll()
-        if (badges.isEmpty) NoContent
+        if (badges.isEmpty) NotFound("Badges not found")
         else Ok(<badges>
           {badges.map(a => a.toXml)}
         </badges>)
@@ -26,16 +35,22 @@ class Badges @Inject()(badgeService: BadgeService) extends Controller {
     }
   }
 
+  @ApiOperation(
+    nickname = "getBadgesByCategory",
+    value = "Get all badges for a specific category",
+    notes = "Return a list of badges",
+    response = classOf[models.Badge], httpMethod = "GET")
+  @ApiResponses(Array(new ApiResponse(code = 404, message = "Badges not found"), new ApiResponse(code = 200, message = "Badges found")))
   def getBadgesByCategory(category_id: Long) = Action { request =>
     request.accepts("application/json") || request.accepts("text/json") match {
       case true => {
         val badges: List[Badge] = badgeService.getBadgesByCategory(category_id)
-        if (badges.isEmpty) NoContent
+        if (badges.isEmpty) NotFound("Badges not found")
         else Ok(Json.toJson(badges))
       }
       case false => {
         val badges: List[Badge] = badgeService.getBadgesByCategory(category_id)
-        if (badges.isEmpty) NoContent
+        if (badges.isEmpty) NotFound("Badges not found")
         else Ok(<badges>
           {badgeService.getBadgesByCategory(category_id).map(a => a.toXml)}
         </badges>)
@@ -43,21 +58,34 @@ class Badges @Inject()(badgeService: BadgeService) extends Controller {
     }
   }
 
+  @ApiOperation(
+    nickname = "getBadgesByUser",
+    value = "Get all badges for a specific user",
+    notes = "Return a list of badges",
+    response = classOf[models.Badge], httpMethod = "GET")
+  @ApiResponses(Array(new ApiResponse(code = 404, message = "Badges not found"), new ApiResponse(code = 200, message = "Badges found")))
   def getBadgesByUser(user_id: String) = Action { request =>
     request.accepts("application/json") || request.accepts("text/json") match {
       case true => {
         val badges: List[EnhancedBadge] = badgeService.getBadgesByUser(UUID.fromString(user_id))
-        if (badges.isEmpty) NoContent
+        if (badges.isEmpty) NotFound("Badges not found")
         else Ok(Json.toJson(badges))
       }
       case false => {
         val badges: List[EnhancedBadge] = badgeService.getBadgesByUser(UUID.fromString(user_id))
-        if (badges.isEmpty) NoContent
+        if (badges.isEmpty) NotFound("Badges not found")
         else Ok(<badges>{badges.map(a => a.toXml)}</badges>)
       }
     }
   }
 
+  @ApiOperation(
+    nickname = "createBadge",
+    value = "Create an badge",
+    response = classOf[models.Badge], httpMethod = "POST")
+  @ApiResponses(Array(
+    new ApiResponse(code = 400, message = "The badge could not be created"),
+    new ApiResponse(code = 200, message = "The badge has been successfully created")))
   def createBadge() = Action(parse.json) { implicit request =>
     val title: String = (request.body \ "title").as[String]
     val category: Long = (request.body \ "category_id").as[Long]
@@ -72,13 +100,13 @@ class Badges @Inject()(badgeService: BadgeService) extends Controller {
     }
   }
 
-  def unlockBadge() = Action(parse.json) { implicit request =>
+  def updateUserBadge() = Action(parse.json) { implicit request =>
     val user_id: String = (request.body \ "user_id").as[String]
     val badge_id: Long = (request.body \ "badge_id").as[Long]
     val status: String = (request.body \ "status").as[String]
     val remaining: Long = (request.body \ "remaining").asOpt[Long].getOrElse(-1)
 
-    val id = badgeService.unlock(UUID.fromString(user_id), badge_id, status, remaining)
+    val id = badgeService.updateUserBadge(UUID.fromString(user_id), badge_id, status, remaining)
     id match {
       case 0 => BadRequest("The badge could not be unlock")
       case _ => Ok("The badge has been successfully unlock")

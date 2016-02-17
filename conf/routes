@@ -11,7 +11,7 @@ GET           /badges/categories/:category_id        @controllers.Badges.getBadg
 GET           /badges/user/:user_id                  @controllers.Badges.getBadgesByUser(user_id: String)
 GET           /badges/user/:user_id/:status          @controllers.Badges.getBadgesFilteredByUser(user_id: String, status:String)
 POST          /badges                                @controllers.Badges.createBadge()
-PUT           /badges/unlock                         @controllers.Badges.unlockBadge()
+PUT           /badges/user                           @controllers.Badges.updateUserBadge()
 PUT           /badges/:badge_id                      @controllers.Badges.updateBadge(badge_id: Long)
 DELETE        /badges/:badge_id                      @controllers.Badges.deleteBadge(badge_id: Long)
 

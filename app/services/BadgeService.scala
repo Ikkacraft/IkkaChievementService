@@ -60,7 +60,7 @@ class BadgeService {
     id.getOrElse(-1)
   }
 
-  def unlock(user_id: UUID, badge_id: Long, status: String, remaining: Long): Long = {
+  def updateUserBadge(user_id: UUID, badge_id: Long, status: String, remaining: Long): Long = {
     val id: Long = DB.withConnection { implicit c =>
       SQL("REPLACE INTO UNBLOCK VALUES({badge_id}, {user_id}, {status}, {remaining})")
         .on('user_id -> user_id, 'badge_id -> badge_id, 'status -> status, 'remaining -> remaining).executeUpdate()

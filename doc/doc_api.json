@@ -1,0 +1,362 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "",
+    "contact": {
+      "name": ""
+    },
+    "license": {
+      "name": "",
+      "url": "http://licenseUrl"
+    }
+  },
+  "host": "localhost:9003",
+  "basePath": "%SWAGGER_API_BASEPATH%",
+  "tags": [
+    {
+      "name": "badges"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Test web service is up",
+        "description": "",
+        "operationId": "index",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Your new application is ready."
+          }
+        }
+      }
+    },
+    "/badges": {
+      "get": {
+        "tags": [
+          "badges"
+        ],
+        "summary": "Get all badges",
+        "description": "Return a list of badges",
+        "operationId": "getBadges",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Badges found"
+          },
+          "404": {
+            "description": "Badges not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "badges"
+        ],
+        "summary": "Create an badge",
+        "description": "",
+        "operationId": "createBadge",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The badge has been successfully created"
+          },
+          "400": {
+            "description": "The badge could not be created"
+          }
+        }
+      }
+    },
+    "/badges/categories/{category_id}": {
+      "get": {
+        "tags": [
+          "badges"
+        ],
+        "summary": "Get all badges for a specific category",
+        "description": "Return a list of badges",
+        "operationId": "getBadgesByCategory",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Badges found"
+          },
+          "404": {
+            "description": "Badges not found"
+          }
+        }
+      }
+    },
+    "/badges/user": {
+      "put": {
+        "tags": [
+          "badges"
+        ],
+        "summary": "Update the badge of a user",
+        "description": "",
+        "operationId": "updateUserBadge",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The badge has been successfully updated"
+          },
+          "400": {
+            "description": "The badge could not be updated"
+          }
+        }
+      }
+    },
+    "/badges/user/{user_id}": {
+      "get": {
+        "tags": [
+          "badges"
+        ],
+        "summary": "Get all badges for a specific user",
+        "description": "Return a list of badges",
+        "operationId": "getBadgesByUser",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Badges found"
+          },
+          "404": {
+            "description": "Badges not found"
+          }
+        }
+      }
+    },
+    "/badges/user/{user_id}/{status}": {
+      "get": {
+        "tags": [
+          "badges"
+        ],
+        "summary": "Get badges for one user",
+        "description": "Return a list of badge",
+        "operationId": "getBadgesFilteredByUser",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Badges found"
+          },
+          "404": {
+            "description": "Badges not found"
+          }
+        }
+      }
+    },
+    "/badges/{badge_id}": {
+      "put": {
+        "tags": [
+          "badges"
+        ],
+        "summary": "Update a specific badge",
+        "description": "",
+        "operationId": "updateBadge",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "badge_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The badge has been successfully updated"
+          },
+          "400": {
+            "description": "The badge could not be updated"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "badges"
+        ],
+        "summary": "Delete a badge",
+        "description": "",
+        "operationId": "deleteBadge",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "badge_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The badge has been successfully deleted"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": [
+          "badges"
+        ],
+        "summary": "Get all categories",
+        "description": "Return a list of category",
+        "operationId": "getCategories",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Categories found"
+          },
+          "404": {
+            "description": "Categories not found"
+          }
+        }
+      }
+    },
+    "/categories/{category_id}": {
+      "get": {
+        "tags": [
+          "badges"
+        ],
+        "summary": "Get one category r",
+        "description": "Return a category",
+        "operationId": "getCategory",
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category found"
+          },
+          "404": {
+            "description": "Category not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Category": {
+      "type": "object",
+      "properties": {
+        "category_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    },
+    "ActionAnyContent": {
+      "type": "object"
+    },
+    "Badge": {
+      "type": "object",
+      "properties": {
+        "badge_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "title": {
+          "type": "string"
+        },
+        "category_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "description": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "urlImage": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

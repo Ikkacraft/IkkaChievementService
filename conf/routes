@@ -5,6 +5,9 @@
 # Home page
 GET           /                                      @controllers.Application.index
 
+# Documentation
+GET           /swagger.json                          @controllers.ApiHelpController.getResources
+
 # Badges
 GET           /badges                                @controllers.Badges.getBadges()
 GET           /badges/categories/:category_id        @controllers.Badges.getBadgesByCategory(category_id: Long)

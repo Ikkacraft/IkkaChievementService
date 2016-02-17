@@ -25,7 +25,7 @@ class Authorized extends ActionBuilder[Request] with ActionFilter[Request] {
           }
         }
       }
-      Await.result(future, 5000 millis)
+      Await.result(future, 10000 millis)
 
     } getOrElse Some(Unauthorized)
     Future.successful(result)
